@@ -1,5 +1,5 @@
 class StockInquiry::CLI
-  attr_reader :ticker, :ticker_list
+  attr_reader :ticker, :ticker_list, :stock 
 
   def initialize
     @ticker_list = File.readlines("./lib/stock_inquiry/stock_ticker_092017.txt").map { |ticker| ticker.chomp }.sort
@@ -10,6 +10,7 @@ class StockInquiry::CLI
     valid_ticker?
     s = Scraper.new(ticker)
     s.scrape_all
+    @stock = Stock.find_by_ticker(ticker)
     menu
   end
 

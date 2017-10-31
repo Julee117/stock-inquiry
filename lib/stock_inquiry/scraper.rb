@@ -9,6 +9,14 @@ class StockInquiry::Scrape
     @doc_description = Nokogiri::HTML(open("https://www.reuters.com/finance/stocks/company-profile/#{ticker}"))
   end
 
+  def scrape_all
+    scrape_name
+    scrape_prices
+    scrape_articles
+    scrape_description
+    @stock.save
+  end
+
   def scrape_name
     @stock.name = @doc.search("#sectionTitle").text.strip
   end
@@ -21,6 +29,17 @@ class StockInquiry::Scrape
       high = info.search("div:nth-child(6) div:nth-child(1) span.sectionQuoteDetailHigh").text.strip
       low = info.search("div:nth-child(6) div:nth-child(2) span.sectionQuoteDetailLow").text.strip
       @stock.range = "#{low} - #{high}"
+    end
+  end
+
+  def scrape_articles
+    @doc.search(".moduleBody").each do |section|
+      section.search(".feature").each do |article|
+        news_article = Article.new
+        news_article.title = article.search("h2").text.strip
+        news_article.url = article.search("h2 a").attr('href').text.strip
+        @stock.add_article(news_article)
+      end
     end
   end
 

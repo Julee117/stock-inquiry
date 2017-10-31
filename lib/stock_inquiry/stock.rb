@@ -16,7 +16,10 @@ class StockInquiry::Stock
   end
 
   def save
-    self.class.all << self 
+    self.class.all << self
   end
 
+  def self.find_by_ticker(ticker)
+    self.all.detect { |stock| stock.ticker == ticker }
+  end
 end
