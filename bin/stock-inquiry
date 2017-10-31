@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "stock_inquiry"
+
+StockInquiry::CLI.new.start
