@@ -8,6 +8,7 @@ class StockInquiry::CLI
   def start
     obtain_ticker
     valid_ticker?
+    menu
   end
 
   def obtain_ticker
@@ -63,7 +64,7 @@ class StockInquiry::CLI
         restart
       when "exit"
         exit_program
-      end 
+      end
     end
   end
 end
