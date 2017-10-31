@@ -8,9 +8,9 @@ class StockInquiry::CLI
   def start
     obtain_ticker
     valid_ticker?
-    s = Scraper.new(ticker)
+    s = StockInquiry::Scraper.new(ticker)
     s.scrape_all
-    @stock = Stock.find_by_ticker(ticker)
+    @stock = StockInquiry::Stock.find_by_ticker(ticker)
     menu
   end
 

@@ -1,11 +1,11 @@
-class StockInquiry::Scrape
+class StockInquiry::Scraper
   attr_accessor :stock
   attr_reader :doc, :doc_description
 
   def initialize(ticker)
-    @stock = Stock.new
+    @stock = StockInquiry::Stock.new
     @stock.ticker = ticker
-    @doc = Nokogiri::HTML(open("https://www.reuters.com/finance/stocks/overview/{ticker}"))
+    @doc = Nokogiri::HTML(open("https://www.reuters.com/finance/stocks/overview/#{ticker}"))
     @doc_description = Nokogiri::HTML(open("https://www.reuters.com/finance/stocks/company-profile/#{ticker}"))
   end
 
@@ -35,7 +35,7 @@ class StockInquiry::Scrape
   def scrape_articles
     @doc.search(".moduleBody").each do |section|
       section.search(".feature").each do |article|
-        news_article = Article.new
+        news_article = StockInquiry::Article.new
         news_article.title = article.search("h2").text.strip
         news_article.url = article.search("h2 a").attr('href').text.strip
         @stock.add_article(news_article)
