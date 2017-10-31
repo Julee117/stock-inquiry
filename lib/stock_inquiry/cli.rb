@@ -31,7 +31,7 @@ class StockInquiry::CLI
     input = ""
     while input != "exit"
       puts ""
-      puts "#{ticker}"
+      puts "#{ticker}:  #{stock.name}"
       puts ""
       puts "Enter CURRENT to see current price"
       puts "Enter OPEN to see open price"
@@ -93,6 +93,32 @@ class StockInquiry::CLI
 
   def show_chart
     system("open http://www.reuters.com/finance/stocks/chart/#{ticker}")
+  end
+
+  def list_articles
+    puts ""
+    @stock.articles.each.with_index(1) do |article, idx|
+      puts "#{idx}.   #{article.title}"
+    end
+    if @stock.articles == []
+      puts "There are no latest news posted in the site"
+      puts "Please enter more to look for further information"
+    else
+      show_article
+    end
+  end
+
+  def show_article
+    puts "Enter number of the article you would like to read"
+    input = gets.to_i
+
+    total_num = @stock.articles.size
+    if !input.between?(1, total_num)
+      puts "Number not found"
+      show_article
+    else
+      system("open", "https://www.reuters.com#{stock.articles[input - 1].url}")
+    end
   end
 
   def show_description
