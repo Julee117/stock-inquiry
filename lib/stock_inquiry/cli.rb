@@ -88,6 +88,29 @@ class StockInquiry::CLI
 
   def list_range
     puts ""
-    puts @stock.range 
+    puts @stock.range
+  end
+
+  def show_chart
+    system("open http://www.reuters.com/finance/stocks/chart/#{ticker}")
+  end
+
+  def show_description
+    puts ""
+    puts @stock.description
+  end
+
+  def more
+    system("open https://www.reuters.com/finance/stocks/overview/#{ticker}")
+  end
+
+  def restart
+    start
+  end
+
+  def exit_program
+    puts ""
+    puts "Thank you for using stock inquiry"
+    exit
   end
 end
