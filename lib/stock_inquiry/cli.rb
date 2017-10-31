@@ -8,6 +8,8 @@ class StockInquiry::CLI
   def start
     obtain_ticker
     valid_ticker?
+    s = Scraper.new(ticker)
+    s.scrape_all
     menu
   end
 
