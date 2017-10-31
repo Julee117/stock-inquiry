@@ -1,5 +1,5 @@
 class StockInquiry::CLI
-  attr_reader :ticker, :ticker_list, :stock 
+  attr_reader :ticker, :ticker_list, :stock
 
   def initialize
     @ticker_list = File.readlines("./lib/stock_inquiry/stock_ticker_092017.txt").map { |ticker| ticker.chomp }.sort
@@ -69,5 +69,25 @@ class StockInquiry::CLI
         exit_program
       end
     end
+  end
+
+  def list_current_price
+    puts ""
+    puts @stock.current_price
+  end
+
+  def list_open_price
+    puts ""
+    puts @stock.open_price
+  end
+
+  def list_previous_price
+    puts ""
+    puts @stock.previous_close
+  end
+
+  def list_range
+    puts ""
+    puts @stock.range 
   end
 end
