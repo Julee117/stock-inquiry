@@ -23,11 +23,13 @@ class StockInquiry::Scraper
 
   def scrape_prices
     @doc.search("#headerQuoteContainer").each do |info|
-      @stock.current_price = info.search("div.sectionQuote.nasdaqChange div.sectionQuoteDetail span")[1].text.strip
+      price = info.search("div.sectionQuote.nasdaqChange div.sectionQuoteDetail span")[1].text.strip
+      currency = info.search("div.sectionQuote.nasdaqChange div.sectionQuoteDetail span")[2].text.strip
+      @stock.current_price = "#{price}#{currency}"
       @stock.previous_close = info.search("div.sectionQuote div.sectionQuoteDetailTop span")[1].text.strip
-      @stock.open_price = info.search("div.sectionQuote div:nth-child(2) span")[1].text.strip
-      high = info.search("div:nth-child(6) div:nth-child(1) span.sectionQuoteDetailHigh").text.strip
-      low = info.search("div:nth-child(6) div:nth-child(2) span.sectionQuoteDetailLow").text.strip
+      @stock.open_price = info.search("div.sectionQuote")[2].search("div.sectionQuoteDetail").search("span")[1].text.strip
+      high = info.search("div.sectionQuote")[5].search("div.sectionQuoteDetailTop").search("span.sectionQuoteDetailHigh").text.strip
+      low = info.search("div.sectionQuote")[5].search("div.sectionQuoteDetail").search("span.sectionQuoteDetailLow").text.strip
       @stock.range = "#{low} - #{high}"
     end
   end
