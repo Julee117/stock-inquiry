@@ -117,7 +117,7 @@ class StockInquiry::CLI
       puts "Number not found"
       show_article
     else
-      system("open", "https://www.reuters.com#{stock.articles[input - 1].url}")
+      system("open https://www.reuters.com#{stock.articles[input - 1].url}")
     end
   end
 
