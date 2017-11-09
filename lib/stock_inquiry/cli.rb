@@ -1,17 +1,18 @@
 class StockInquiry::CLI
   attr_reader :ticker, :ticker_list, :stock
 
-  def initialize
-    @ticker_list = File.readlines("./lib/stock_inquiry/stock_ticker_092017.txt").map { |ticker| ticker.chomp }.sort
-  end
-
   def start
+    load_tickers
     obtain_ticker
     valid_ticker?
     s = StockInquiry::Scraper.new(ticker)
     s.scrape_all
     @stock = StockInquiry::Stock.find_by_ticker(ticker)
     menu
+  end
+  
+  def load_tickers
+    @ticker_list = File.readlines("./lib/stock_inquiry/stock_ticker_092017.txt").map { |ticker| ticker.chomp }.sort
   end
 
   def obtain_ticker
@@ -40,6 +41,7 @@ class StockInquiry::CLI
       puts "Enter CHART to see historical price chart"
       puts "Enter ARTICLES to see related news articles"
       puts "Enter DESCRIPTION to read about the company"
+      puts "Enter HISTORY to view previously searched tickers"
       puts "Enter MORE if you would like to do further research"
       puts "Enter NEW to research another stock/security"
       puts "Enter EXIT to exit program"
@@ -61,6 +63,8 @@ class StockInquiry::CLI
         list_articles
       when "description"
         show_description
+      when "history"
+        show_history
       when "more"
         more
       when "new"
@@ -124,6 +128,15 @@ class StockInquiry::CLI
   def show_description
     puts ""
     puts @stock.description
+  end
+  
+  def show_history
+    puts ""
+    puts "Here are the ticker symbols of all stocks that have been searched previously:"
+    StockInquiry::Stock.all.each do |stock|
+      puts stock.ticker
+    end
+    puts ""
   end
 
   def more
