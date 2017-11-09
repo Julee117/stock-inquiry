@@ -22,4 +22,8 @@ class StockInquiry::Stock
   def self.find_by_ticker(ticker)
     self.all.detect { |stock| stock.ticker == ticker }
   end
+  
+  def self.current_price_above(num)
+    self.all.select { |stock|  stock.current_price.to_f > num }  
+  end
 end
